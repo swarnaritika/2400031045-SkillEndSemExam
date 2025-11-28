@@ -1,74 +1,140 @@
 import React, { useState, useRef } from 'react';
-import './App.css';
 
-const CourseListApp = () => {
+export default function CourseApp() {
   const [courses, setCourses] = useState([
-    "Processors and Controllers",
-    "Object Oriented Programming",
-    "Database Management System",
+    "Processors & Controllers",
+    "Object Oriented Prog.",
+    "Database Mgmt System",
     "Artificial Intelligence",
-    "Frontend Web Development",
+    "Frontend Web Dev",
     "Operating Systems"
   ]);
 
   const dragItem = useRef();
   const dragOverItem = useRef();
 
-  const handleDragStart = (e, position) => {
-    dragItem.current = position;
-  };
-
-  const handleDragEnter = (e, position) => {
-    e.preventDefault();
-    dragOverItem.current = position;
-    
-    const coursesCopy = [...courses];
-    const dragItemContent = coursesCopy[dragItem.current];
-    
-    coursesCopy.splice(dragItem.current, 1);
-    coursesCopy.splice(dragOverItem.current, 0, dragItemContent);
-    
-    dragItem.current = position;
-    setCourses(coursesCopy);
+  const handleSort = () => {
+    const _courses = [...courses];
+    const draggedItemContent = _courses.splice(dragItem.current, 1)[0];
+    _courses.splice(dragOverItem.current, 0, draggedItemContent);
+    dragItem.current = dragOverItem.current;
+    dragOverItem.current = null;
+    setCourses(_courses);
   };
 
   return (
-    <div className="centered-container">
-      {/* Box 1: Draggable List */}
-      <div className="outlined-box">
-        <h2 className="box-title">Course Reordering App</h2>
-        <p className="subtitle">Drag items to rearrange priority</p>
+    <>
+      <style>{`
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; }
+        .draggable-item:hover { background-color: #f0f0f0 !important; }
+        .draggable-item:active { background-color: #e0e0e0 !important; border-color: #000 !important; }
+      `}</style>
+
+      {/* Main Container - Centered, White Background, Black Text */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#ffffff',
+        color: '#f6f1f1ff',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '60px',
+        fontFamily: 'Segoe UI, sans-serif',
+        zIndex: 9999
+      }}>
         
-        <div className="list-content">
-          {courses.map((item, index) => (
-            <div
-              key={index}
-              className="draggable-item"
-              draggable
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragEnter={(e) => handleDragEnter(e, index)}
-              onDragOver={(e) => e.preventDefault()}
-            >
-              <span className="icon">☰</span>
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Box 2: Result Output */}
-      <div className="outlined-box">
-        <h2 className="box-title">Current Order</h2>
-        <div className="list-content">
-          <ol className="result-list">
-            {courses.map((course, idx) => (
-              <li key={idx}>{course}</li>
+        {/* BOX 1: DRAGGABLE LIST */}
+        <div style={{
+          width: '320px',
+          height: '500px',
+          border: '3px solid #f3efefff', /* Black Outline */
+          borderRadius: '12px',
+          padding: '25px',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#ffffff',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)' /* Soft shadow for "good" feel */
+        }}>
+          <h3 style={{ 
+            textAlign: 'center', 
+            borderBottom: '2px solid #000000', 
+            paddingBottom: '15px', 
+            marginTop: 0,
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            Drag to Reorder
+          </h3>
+          <div style={{ flex: 1, overflowY: 'auto', paddingRight: '5px' }}>
+            {courses.map((item, index) => (
+              <div
+                key={index}
+                className="draggable-item"
+                draggable
+                onDragStart={() => (dragItem.current = index)}
+                onDragEnter={() => (dragOverItem.current = index)}
+                onDragEnd={handleSort}
+                onDragOver={(e) => e.preventDefault()}
+                style={{
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  padding: '15px',
+                  marginBottom: '10px',
+                  background: '#f9f9f9', /* Light grey item bg */
+                  cursor: 'grab',
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontWeight: '500',
+                  transition: 'all 0.2s ease',
+                  color: '#000'
+                }}
+              >
+                <span style={{ marginRight: '15px', fontSize: '1.2em', color: '#666' }}>☰</span>
+                {item}
+              </div>
             ))}
-          </ol>
+          </div>
         </div>
-      </div>
-    </div>
-  );
-};
 
-export default CourseListApp;
+        {/* BOX 2: RESULT LIST */}
+        <div style={{
+          width: '320px',
+          height: '500px',
+          border: '3px solid #f3f2f2ff', /* Black Outline */
+          borderRadius: '12px',
+          padding: '25px',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#ffffff',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+        }}>
+          <h3 style={{ 
+            textAlign: 'center', 
+            borderBottom: '2px solid #efebebff', 
+            paddingBottom: '15px', 
+            marginTop: 0,
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            Current Order
+          </h3>
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            <ol style={{ paddingLeft: '25px', fontSize: '1.1em', lineHeight: '1.6', color: '#000' }}>
+              {courses.map((item, i) => (
+                <li key={i} style={{ marginBottom: '12px', borderBottom: '1px solid #eee', paddingBottom: '8px' }}>
+                  {item}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </>
+  );
+}
