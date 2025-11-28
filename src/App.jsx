@@ -1,72 +1,75 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import './App.css';
 
-const CourseListApp = () => {
-  // 1. Define initial list of at least 5 courses
-  const [courses, setCourses] = useState([
-    "Processors and controllers",
-    "Object oriented programming",
-    "Database managament system",
-    "Artifical intelligence",
-    "Frontend web development",
-    "Operating systems"
-  ]);
+const initialCourses = [
+  { id: 'c1', name: '1. Object Oriented-Java' },
+  { id: 'c2', name: '2. Machine Learning' },
+  { id: 'c3', name: '3. Operating System' },
+  { id: 'c4', name: '4. FrontEnd WebDevelopment' },
+  { id: 'c5', name: '5. Database Management' },
+];
 
-  const dragItem = useRef();
-  const dragOverItem = useRef();
+function App() {
+  const [courses, setCourses] = useState(initialCourses);
 
-  // 2. Handle Drag Start
-  const handleDragStart = (e, position) => {
-    dragItem.current = position;
-  };
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
 
-  // 3. Handle Drag Enter (Rearrange logic)
-  const handleDragEnter = (e, position) => {
-    dragOverItem.current = position;
-    
-    const coursesCopy = [...courses];
-    const dragItemContent = coursesCopy[dragItem.current];
-    
-    coursesCopy.splice(dragItem.current, 1);
-    coursesCopy.splice(dragOverItem.current, 0, dragItemContent);
-    
-    dragItem.current = position;
-    setCourses(coursesCopy);
+    const items = Array.from(courses);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setCourses(items);
   };
 
   return (
-    <div className="app-container">
-      <h2>Course Reordering App</h2>
-      <p>Drag and drop items to rearrange the priority.</p>
-
-      {/* List Container */}
-      <div className="course-list">
-        {courses.map((item, index) => (
-          <div
-            key={index}
-            className="course-item"
-            draggable
-            onDragStart={(e) => handleDragStart(e, index)}
-            onDragEnter={(e) => handleDragEnter(e, index)}
-            onDragOver={(e) => e.preventDefault()}
-          >
-            <span className="drag-icon">☰</span>
-            {item}
-          </div>
-        ))}
+    <div className="main-container">
+      {/* Box 1: Draggable List */}
+      <div className="outline-box">
+        <h2>Course List</h2>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="courses">
+            {(provided) => (
+              <ul 
+                className="course-list" 
+                {...provided.droppableProps} 
+                ref={provided.innerRef}
+              >
+                {courses.map(({ id, name }, index) => (
+                  <Draggable key={id} draggableId={id} index={index}>
+                    {(provided, snapshot) => (
+                      <li
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={`course-item ${snapshot.isDragging ? 'dragging' : ''}`}
+                      >
+                        {name}
+                      </li>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
 
-      {/* 4. Display Updated Order */}
-      <div className="output-section">
-        <h3>Current Order:</h3>
-        <ol>
+      {/* Box 2: Updated Order Display */}
+      <div className="outline-box">
+        <h2>Current Order</h2>
+        <div className="status-content">
           {courses.map((course, index) => (
-            <li key={index}>{course}</li>
+            <p key={course.id}>
+              <strong>{index + 1}:</strong> {course.name}
+            </p>
           ))}
-        </ol>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default CourseListApp;
+export default App;

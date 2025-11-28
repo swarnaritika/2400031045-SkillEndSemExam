@@ -1,124 +1,81 @@
-/* 1. Reset and Page Background */
-* {
+/* 1. Ensure the root element takes full width (Fixes the left alignment issue) */
+#root {
+  width: 100%;
+  margin: 0 auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%; /* Ensure body is full width */
+}
+
+/* 2. Center the container */
+.main-container {
+  display: flex;
+  justify-content: center; /* Horizontal Center */
+  align-items: flex-start; /* Aligns items to the top (with padding) */
+  gap: 40px;
+  min-height: 100vh;
+  width: 100%; /* Forces the container to span the whole screen */
+  padding-top: 100px;
   box-sizing: border-box;
 }
 
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #ede8e8; /* Pure Black Background */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #0a0a0a; /* Global White Text */
+/* The Outline Boxes */
+.outline-box {
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 8px;
+  width: 320px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* 2. FORCE CENTER via Root */
-#root {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center; /* Horizontally Center */
-  align-items: center;     /* Vertically Center */
-}
-
-/* 3. Container for the Two Boxes */
-.centered-container {
-  display: flex;
-  gap: 40px; /* Space between the two boxes */
-  justify-content: center;
-  align-items: stretch;
-  height: 600px; /* Fixed height for consistency */
-}
-
-/* 4. The Outlined Box Style (White Border) */
-.outlined-box {
-  width: 400px;
-  border: 2px solid #131313; /* White Line Outline */
-  border-radius: 10px;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  background-color: #f4efef; /* Black inside the box too */
-}
-
-/* 5. Headers */
-.box-title {
+.outline-box h2 {
+  color: black;
+  text-align: center;
   margin-top: 0;
-  border-bottom: 1px solid #555; /* Subtle grey separator */
+  border-bottom: 2px solid #eee;
   padding-bottom: 15px;
-  margin-bottom: 15px;
-  color: #101010;
-}
-
-.subtitle {
-  color: #cccccc; /* Slightly dimmer white for subtitle */
   margin-bottom: 20px;
-  font-size: 0.9rem;
 }
 
-/* 6. List Content Area */
-.list-content {
-  flex: 1;
-  overflow-y: auto; /* Scroll if list gets too long */
+/* List Styles */
+.course-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* 7. Draggable Item Style */
-.draggable-item {
-  padding: 15px 10px;
-  margin-bottom: 8px;
+.course-item {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  color: black;
   cursor: grab;
-  border: 1px solid #333; /* Dark border for items */
-  border-radius: 5px;
-  background-color: #f5f2f2; /* Very dark grey item background */
+  font-weight: 500;
   display: flex;
   align-items: center;
-  transition: background 0.2s;
+  justify-content: space-between;
 }
 
-.draggable-item:hover {
-  background-color: #222;
+.course-item.dragging {
+  background-color: #e3f2fd;
+  border: 2px dashed black;
 }
 
-.draggable-item:active {
-  cursor: grabbing;
-  border-color: #ffffff; /* Highlight border on drag */
+.status-content p {
+  color: black;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 0;
 }
 
-.icon {
-  margin-right: 15px;
-  font-size: 1.2rem;
-  color: #ffffff;
-}
-
-/* 8. Result List (The "Down Matter") */
-.result-list {
-  padding-left: 20px;
-  font-size: 1.1rem;
-  color: #ffffff; /* Ensure this is White */
-}
-
-.result-list li {
-  margin-bottom: 12px;
-  border-bottom: 1px solid #f1eeee;
-  padding-bottom: 5px;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 900px) {
-  .centered-container {
-    flex-direction: column;
-    height: auto;
-    align-items: center;
-  }
-  
-  .outlined-box {
-    width: 90%;
-    margin-bottom: 20px;
-  }
-  
-  #root {
-    height: auto;
-    padding: 20px 0;
-  }
+.status-content p:last-child {
+  border-bottom: none;
 }
