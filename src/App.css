@@ -1,0 +1,124 @@
+/* 1. Reset and Page Background */
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000000; /* Pure Black Background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff; /* Global White Text */
+}
+
+/* 2. FORCE CENTER via Root */
+#root {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center; /* Horizontally Center */
+  align-items: center;     /* Vertically Center */
+}
+
+/* 3. Container for the Two Boxes */
+.centered-container {
+  display: flex;
+  gap: 40px; /* Space between the two boxes */
+  justify-content: center;
+  align-items: stretch;
+  height: 600px; /* Fixed height for consistency */
+}
+
+/* 4. The Outlined Box Style (White Border) */
+.outlined-box {
+  width: 400px;
+  border: 2px solid #ffffff; /* White Line Outline */
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #000000; /* Black inside the box too */
+}
+
+/* 5. Headers */
+.box-title {
+  margin-top: 0;
+  border-bottom: 1px solid #555; /* Subtle grey separator */
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.subtitle {
+  color: #cccccc; /* Slightly dimmer white for subtitle */
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+/* 6. List Content Area */
+.list-content {
+  flex: 1;
+  overflow-y: auto; /* Scroll if list gets too long */
+}
+
+/* 7. Draggable Item Style */
+.draggable-item {
+  padding: 15px 10px;
+  margin-bottom: 8px;
+  cursor: grab;
+  border: 1px solid #333; /* Dark border for items */
+  border-radius: 5px;
+  background-color: #111; /* Very dark grey item background */
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.draggable-item:hover {
+  background-color: #222;
+}
+
+.draggable-item:active {
+  cursor: grabbing;
+  border-color: #ffffff; /* Highlight border on drag */
+}
+
+.icon {
+  margin-right: 15px;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+/* 8. Result List (The "Down Matter") */
+.result-list {
+  padding-left: 20px;
+  font-size: 1.1rem;
+  color: #ffffff; /* Ensure this is White */
+}
+
+.result-list li {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+  .centered-container {
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+  }
+  
+  .outlined-box {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+  
+  #root {
+    height: auto;
+    padding: 20px 0;
+  }
+}
